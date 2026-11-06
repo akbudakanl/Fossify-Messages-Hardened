@@ -151,4 +151,13 @@ class Config(context: Context) : BaseConfig(context) {
         get() = prefs.getBoolean(KEEP_CONVERSATIONS_ARCHIVED, false)
         set(keepConversationsArchived) = prefs.edit()
             .putBoolean(KEEP_CONVERSATIONS_ARCHIVED, keepConversationsArchived).apply()
+
+    /**
+     * When enabled, incoming MMS (WAP push) payloads are never parsed or downloaded, stored MMS
+     * parts are never decoded, and nothing is sent as MMS. Off by default because it irreversibly
+     * discards incoming MMS notifications.
+     */
+    var blockMms: Boolean
+        get() = prefs.getBoolean(BLOCK_MMS, false)
+        set(blockMms) = prefs.edit().putBoolean(BLOCK_MMS, blockMms).apply()
 }

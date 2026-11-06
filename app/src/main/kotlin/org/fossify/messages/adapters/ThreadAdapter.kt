@@ -390,7 +390,7 @@ class ThreadAdapter(
             }
 
             threadMessageAttachmentsHolder.removeAllViews()
-            if (message.attachment?.attachments?.isNotEmpty() == true) {
+            if (!activity.config.blockMms && message.attachment?.attachments?.isNotEmpty() == true) {
                 threadMessageAttachmentsHolder.beVisible()
                 for (attachment in message.attachment.attachments) {
                     val mimetype = attachment.mimetype

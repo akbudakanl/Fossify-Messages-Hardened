@@ -943,7 +943,12 @@ class ThreadActivity : SimpleActivity() {
             }
 
             threadTypeMessage.setText(intent.getStringExtra(THREAD_TEXT))
+            threadAddAttachment.beVisibleIf(!config.blockMms)
             threadAddAttachment.setOnClickListener {
+                if (config.blockMms) {
+                    toast(R.string.mms_error_carrier_disabled)
+                    return@setOnClickListener
+                }
                 if (attachmentPickerHolder.isVisible()) {
                     isAttachmentPickerVisible = false
                     hideAttachmentPicker()
@@ -1486,6 +1491,10 @@ class ThreadActivity : SimpleActivity() {
     private fun getAttachmentSelections() = getAttachmentsAdapter()?.attachments ?: emptyList()
 
     private fun addAttachment(uri: Uri) {
+        if (config.blockMms) {
+            toast(R.string.mms_error_carrier_disabled)
+            return
+        }
         val id = uri.toString()
         if (getAttachmentSelections().any { it.id == id }) {
             toast(R.string.duplicate_item_warning)
@@ -1905,6 +1914,7 @@ class ThreadActivity : SimpleActivity() {
     }
 
     private fun isMmsMessage(text: String): Boolean {
+        if (config.blockMms) return false
         val isGroupMms = participants.size > 1 && config.sendGroupMessageMMS
         val isLongMmsMessage = isLongMmsMessage(text)
         return getAttachmentSelections().isNotEmpty() || isGroupMms || isLongMmsMessage

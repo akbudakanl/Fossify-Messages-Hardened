@@ -11,4 +11,6 @@
     <string name="sms">SMS</string>
     <string name="mms">MMS</string>
     <string name="message_details_sim">SIM</string>
+    <string name="block_mms">Block MMS completely (do not parse or download)</string>
+    <string name="mms_blocked_placeholder">(MMS engellendi)</string>
 </resources>

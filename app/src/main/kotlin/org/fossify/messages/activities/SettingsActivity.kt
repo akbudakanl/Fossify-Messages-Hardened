@@ -117,6 +117,7 @@ class SettingsActivity : SimpleActivity() {
         setupUseRecycleBin()
         setupEmptyRecycleBin()
         setupAppPasswordProtection()
+        setupBlockMms()
         setupMessagesExport()
         setupMessagesImport()
         updateTextColors(binding.settingsNestedScrollview)
@@ -404,7 +405,8 @@ class SettingsActivity : SimpleActivity() {
         }
     }
 
-    private fun setupAppPasswordProtection() = binding.apply {
+    private fun setupAppPasswordProtection()
+        setupBlockMms() = binding.apply {
         settingsAppPasswordProtection.isChecked = config.isAppPasswordProtectionOn
         settingsAppPasswordProtectionHolder.setOnClickListener {
             val tabToShow = if (config.isAppPasswordProtectionOn) {
@@ -443,6 +445,15 @@ class SettingsActivity : SimpleActivity() {
                     }
                 }
             }
+        }
+    }
+
+
+    private fun setupBlockMms() = binding.apply {
+        settingsBlockMms.isChecked = config.blockMms
+        settingsBlockMmsHolder.setOnClickListener {
+            settingsBlockMms.toggle()
+            config.blockMms = settingsBlockMms.isChecked
         }
     }
 

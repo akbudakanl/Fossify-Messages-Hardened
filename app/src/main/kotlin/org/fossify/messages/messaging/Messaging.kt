@@ -23,9 +23,9 @@ fun Context.getSendMessageSettings(): Settings {
     val settings = Settings()
     settings.useSystemSending = true
     settings.deliveryReports = config.enableDeliveryReports
-    settings.sendLongAsMms = config.sendLongMessageMMS
+    settings.sendLongAsMms = config.sendLongMessageMMS && !config.blockMms
     settings.sendLongAsMmsAfter = 1
-    settings.group = config.sendGroupMessageMMS
+    settings.group = config.sendGroupMessageMMS && !config.blockMms
     return settings
 }
 
@@ -49,8 +49,12 @@ fun Context.sendMessageCompat(
     }
 
     val messagingUtils = messagingUtils
-    val isMms = attachments.isNotEmpty() || isLongMmsMessage(text, settings)
-            || addresses.size > 1 && settings.group
+    if (config.blockMms && attachments.isNotEmpty()) {
+        toast(R.string.mms_error_carrier_disabled, length = LENGTH_LONG)
+        return
+    }
+    val isMms = !config.blockMms && (attachments.isNotEmpty() || isLongMmsMessage(text, settings)
+            || addresses.size > 1 && settings.group)
     if (isMms) {
         // we send all MMS attachments separately to reduces the chances of hitting provider MMS limit.
         if (attachments.isNotEmpty()) {
