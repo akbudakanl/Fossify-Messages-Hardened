@@ -274,18 +274,6 @@ class NewConversationActivity : SimpleActivity() {
             putExtra(THREAD_TITLE, name)
             putExtra(THREAD_TEXT, body.ifEmpty { intent.getStringExtra(Intent.EXTRA_TEXT) })
             putExtra(THREAD_NUMBER, number)
-
-            if (intent.action == Intent.ACTION_SEND && intent.extras?.containsKey(Intent.EXTRA_STREAM) == true) {
-                val uri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
-                putExtra(THREAD_ATTACHMENT_URI, uri?.toString())
-            } else if (intent.action == Intent.ACTION_SEND_MULTIPLE && intent.extras?.containsKey(
-                    Intent.EXTRA_STREAM
-                ) == true
-            ) {
-                val uris = intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)
-                putExtra(THREAD_ATTACHMENT_URIS, uris)
-            }
-
             startActivity(this)
         }
     }

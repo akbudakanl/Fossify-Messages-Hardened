@@ -21,6 +21,24 @@
     <uses-permission
         android:name="android.permission.USE_BIOMETRIC"
         tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.INTERNET"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.ACCESS_NETWORK_STATE"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.CHANGE_NETWORK_STATE"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.ACCESS_WIFI_STATE"
+        tools:node="remove" />
+    <uses-permission
+        android:name="org.fossify.android.permission.WRITE_GLOBAL_SETTINGS"
+        tools:node="remove" />
+    <uses-permission
+        android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY"
+        tools:node="remove" />
 
     <queries>
         <package android:name="org.fossify.contacts.debug" />
@@ -31,12 +49,13 @@
 
     <application
         android:name=".App"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:appCategory="productivity"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_launcher_name"
         android:roundIcon="@mipmap/ic_launcher"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup">
 
         <activity
             android:name=".activities.SplashActivity"
@@ -46,19 +65,19 @@
         <activity
             android:name=".activities.MainActivity"
             android:configChanges="orientation"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity
             android:name=".activities.RecycleBinConversationsActivity"
             android:configChanges="orientation"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/recycle_bin"
             android:parentActivityName=".activities.MainActivity" />
 
         <activity
             android:name=".activities.ArchivedConversationsActivity"
             android:configChanges="orientation"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/archived_conversations"
             android:parentActivityName=".activities.MainActivity" />
 
@@ -87,20 +106,6 @@
                 <data android:scheme="smsto" />
                 <data android:scheme="mms" />
                 <data android:scheme="mmsto" />
-            </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="*/*" />
-            </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.SEND_MULTIPLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="*/*" />
             </intent-filter>
         </activity>
 
@@ -191,7 +196,7 @@
         </receiver>
 
         <receiver
-            android:name="com.android.mms.transaction.PushReceiver"
+            android:name=".receivers.WapPushReceiver"
             android:exported="true"
             android:permission="android.permission.BROADCAST_WAP_PUSH">
             <intent-filter>
@@ -209,7 +214,7 @@
 
         <receiver
             android:name=".receivers.MmsReceiver"
-            android:exported="true"
+            android:exported="false"
             android:taskAffinity="com.klinker.android.messaging.MMS_RECEIVED" />
 
         <receiver
@@ -242,6 +247,20 @@
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name="org.fossify.commons.receivers.FossifyBroadcastReceiver"
+            tools:node="remove" />
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+                tools:node="remove" />
+        </provider>
 
         <provider
             android:name="androidx.core.content.FileProvider"
