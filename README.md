@@ -1,3 +1,6 @@
+This is a security-hardened personal fork of [Fossify Messages](https://github.com/FossifyOrg/Messages).
+licensed under GPLv3. See FORK_CHANGELOG.md for details.
+
 # Fossify Messages
 <img alt="Logo" src="graphics/icon.webp" width="120" />
 
