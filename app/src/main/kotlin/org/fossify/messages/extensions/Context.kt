@@ -259,8 +259,13 @@ fun Context.getMMS(
         val participants = getThreadParticipants(threadId, contactsMap)
 
         val isMMS = true
-        val attachment = getMmsAttachment(mmsId)
-        val body = attachment.text
+        val blockMms = config.blockMms
+        val attachment = if (blockMms) null else getMmsAttachment(mmsId)
+        val body = if (blockMms) {
+            getString(R.string.mms_blocked_placeholder)
+        } else {
+            attachment?.text.orEmpty()
+        }
         var senderNumber = ""
         var senderName = ""
         var senderPhotoUri = ""
@@ -1129,6 +1134,14 @@ fun Context.getNotificationBitmap(photoUri: String): Bitmap? {
 
 fun Context.removeDiacriticsIfNeeded(text: String): String {
     return if (config.useSimpleCharacters) text.normalizeString() else text
+}
+
+fun Context.sanitizeTextIfNeeded(text: String): String {
+    return if (config.sanitizeMessageText) {
+        text.sanitizeForDisplay(getString(R.string.unsupported_characters_removed))
+    } else {
+        text
+    }
 }
 
 fun Context.getSmsDraft(threadId: Long): String {

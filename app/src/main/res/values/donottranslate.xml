@@ -13,4 +13,6 @@
     <string name="message_details_sim">SIM</string>
     <string name="block_mms">Block MMS completely (do not parse or download)</string>
     <string name="mms_blocked_placeholder">(MMS engellendi)</string>
+    <string name="sanitize_message_text">Roboto only (allow only standard keyboard characters)</string>
+    <string name="unsupported_characters_removed">(Unsupported characters removed)</string>
 </resources>

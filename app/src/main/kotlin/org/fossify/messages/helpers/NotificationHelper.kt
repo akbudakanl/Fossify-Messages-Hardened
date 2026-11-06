@@ -21,6 +21,7 @@ import org.fossify.commons.helpers.ensureBackgroundThread
 import org.fossify.messages.R
 import org.fossify.messages.activities.ThreadActivity
 import org.fossify.messages.extensions.config
+import org.fossify.messages.extensions.sanitizeTextIfNeeded
 import org.fossify.messages.extensions.shortcutHelper
 import org.fossify.messages.messaging.isShortCodeWithLetters
 import org.fossify.messages.receivers.DeleteSmsReceiver
@@ -120,8 +121,10 @@ class NotificationHelper(private val context: Context) {
                 .build()
         }
 
-        val largeIcon = bitmap ?: if (sender != null) {
-            SimpleContactsHelper(context).getContactLetterIcon(sender)
+        val safeSender = sender?.let { context.sanitizeTextIfNeeded(it) }
+        val safeBody = context.sanitizeTextIfNeeded(body)
+        val largeIcon = bitmap ?: if (safeSender != null) {
+            SimpleContactsHelper(context).getContactLetterIcon(safeSender)
         } else {
             null
         }
@@ -129,15 +132,15 @@ class NotificationHelper(private val context: Context) {
             when (context.config.lockScreenVisibilitySetting) {
                 LOCK_SCREEN_SENDER_MESSAGE -> {
                     setLargeIcon(largeIcon)
-                    setStyle(getMessagesStyle(address, body, notificationId, sender))
+                    setStyle(getMessagesStyle(address, safeBody, notificationId, safeSender))
                 }
 
                 LOCK_SCREEN_SENDER -> {
-                    setContentTitle(sender)
+                    setContentTitle(safeSender)
                     setLargeIcon(largeIcon)
                     val summaryText = context.getString(R.string.new_message)
                     setStyle(
-                        NotificationCompat.BigTextStyle().setSummaryText(summaryText).bigText(body)
+                        NotificationCompat.BigTextStyle().setSummaryText(summaryText).bigText(safeBody)
                     )
                 }
             }

@@ -160,4 +160,10 @@ class Config(context: Context) : BaseConfig(context) {
     var blockMms: Boolean
         get() = prefs.getBoolean(BLOCK_MMS, false)
         set(blockMms) = prefs.edit().putBoolean(BLOCK_MMS, blockMms).apply()
+
+    /** Strip invisible / bidi / control characters and combining-mark floods from displayed text. */
+    var sanitizeMessageText: Boolean
+        get() = prefs.getBoolean(SANITIZE_MESSAGE_TEXT, true)
+        set(sanitizeMessageText) = prefs.edit()
+            .putBoolean(SANITIZE_MESSAGE_TEXT, sanitizeMessageText).apply()
 }

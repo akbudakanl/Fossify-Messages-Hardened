@@ -455,6 +455,36 @@
 
             </RelativeLayout>
 
+            <RelativeLayout
+                android:id="@+id/settings_block_mms_holder"
+                style="@style/SettingsHolderSwitchStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <org.fossify.commons.views.MyMaterialSwitch
+                    android:id="@+id/settings_block_mms"
+                    style="@style/SettingsSwitchStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/block_mms" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settings_sanitize_message_text_holder"
+                style="@style/SettingsHolderSwitchStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <org.fossify.commons.views.MyMaterialSwitch
+                    android:id="@+id/settings_sanitize_message_text"
+                    style="@style/SettingsSwitchStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sanitize_message_text" />
+
+            </RelativeLayout>
+
             <include
                 android:id="@+id/settings_migrating_divider"
                 layout="@layout/divider" />

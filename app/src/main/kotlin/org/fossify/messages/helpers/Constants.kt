@@ -49,6 +49,7 @@ const val CUSTOM_NOTIFICATIONS = "custom_notifications"
 const val IS_LAUNCHED_FROM_SHORTCUT = "is_launched_from_shortcut"
 const val KEEP_CONVERSATIONS_ARCHIVED = "keep_conversations_archived"
 const val BLOCK_MMS = "block_mms"
+const val SANITIZE_MESSAGE_TEXT = "sanitize_message_text"
 
 private const val PATH = "org.fossify.org.fossify.messages.action."
 const val MARK_AS_READ = PATH + "mark_as_read"

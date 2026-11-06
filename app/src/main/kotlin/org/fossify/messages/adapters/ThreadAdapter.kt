@@ -70,6 +70,7 @@ import org.fossify.messages.extensions.isPlayableAudioMimeType
 import org.fossify.messages.extensions.isVCardMimeType
 import org.fossify.messages.extensions.isVideoMimeType
 import org.fossify.messages.extensions.launchViewIntent
+import org.fossify.messages.extensions.sanitizeTextIfNeeded
 import org.fossify.messages.extensions.startContactDetailsIntent
 import org.fossify.messages.extensions.subscriptionManagerCompat
 import org.fossify.messages.helpers.EXTRA_VCARD_URI
@@ -370,9 +371,12 @@ class ThreadAdapter(
         ItemMessageBinding.bind(view).apply {
             threadMessageHolder.isSelected = selectedKeys.contains(message.getSelectionKey())
             threadMessageBody.apply {
-                text = message.body
+                val displayBody = activity.sanitizeTextIfNeeded(message.body)
+                text = displayBody
+                movementMethod = null
+                linksClickable = false
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize)
-                beVisibleIf(message.body.isNotEmpty())
+                beVisibleIf(displayBody.isNotEmpty())
                 setOnLongClickListener {
                     holder.viewLongClicked()
                     true
@@ -433,7 +437,12 @@ class ThreadAdapter(
             threadMessageBody.apply {
                 background = AppCompatResources.getDrawable(activity, R.drawable.item_received_background)
                 setTextColor(textColor)
-                setLinkTextColor(activity.getProperPrimaryColor())
+                setLinkTextColor(textColor)
+                typeface = if (activity.config.sanitizeMessageText) {
+                    Typeface.DEFAULT
+                } else {
+                    FontHelper.getTypeface(activity)
+                }
             }
 
             if (!activity.isFinishing && !activity.isDestroyed) {
@@ -478,8 +487,13 @@ class ThreadAdapter(
                 setTextColor(contrastColor)
                 setLinkTextColor(contrastColor)
 
+                val baseTypeface = if (activity.config.sanitizeMessageText) {
+                    Typeface.DEFAULT
+                } else {
+                    FontHelper.getTypeface(activity)
+                }
                 if (message.isScheduled) {
-                    typeface = Typeface.create(FontHelper.getTypeface(activity), Typeface.ITALIC)
+                    typeface = Typeface.create(baseTypeface, Typeface.ITALIC)
                     val scheduledDrawable = AppCompatResources.getDrawable(activity, org.fossify.commons.R.drawable.ic_clock_vector)?.apply {
                         applyColorFilter(contrastColor)
                         val size = lineHeight
@@ -488,7 +502,7 @@ class ThreadAdapter(
 
                     setCompoundDrawables(null, null, scheduledDrawable, null)
                 } else {
-                    typeface = FontHelper.getTypeface(activity)
+                    typeface = baseTypeface
                     setCompoundDrawables(null, null, null, null)
                 }
             }

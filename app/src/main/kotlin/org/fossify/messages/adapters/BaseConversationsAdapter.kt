@@ -26,6 +26,7 @@ import org.fossify.messages.activities.SimpleActivity
 import org.fossify.messages.databinding.ItemConversationBinding
 import org.fossify.messages.extensions.config
 import org.fossify.messages.extensions.getAllDrafts
+import org.fossify.messages.extensions.sanitizeTextIfNeeded
 import org.fossify.messages.models.Conversation
 
 @Suppress("LeakingThis")
@@ -155,12 +156,12 @@ abstract class BaseConversationsAdapter(
             conversationFrame.isSelected = selectedKeys.contains(conversation.hashCode())
 
             conversationAddress.apply {
-                text = conversation.title
+                text = activity.sanitizeTextIfNeeded(conversation.title)
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize * 1.2f)
             }
 
             conversationBodyShort.apply {
-                text = smsDraft ?: conversation.snippet
+                text = activity.sanitizeTextIfNeeded(smsDraft ?: conversation.snippet)
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize * 0.9f)
             }
 
@@ -182,7 +183,11 @@ abstract class BaseConversationsAdapter(
                 conversationBodyShort.alpha = 0.7f
                 if (conversation.isScheduled) Typeface.ITALIC else Typeface.NORMAL
             }
-            val customTypeface = FontHelper.getTypeface(activity)
+            val customTypeface = if (activity.config.sanitizeMessageText) {
+                Typeface.DEFAULT
+            } else {
+                FontHelper.getTypeface(activity)
+            }
             conversationAddress.setTypeface(customTypeface, style)
             conversationBodyShort.setTypeface(customTypeface, style)
             conversationDate.setTypeface(customTypeface, style)
